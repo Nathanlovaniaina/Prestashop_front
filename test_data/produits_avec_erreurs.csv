@@ -1,0 +1,4 @@
+name,price,category,reference,description
+"Produit Valide","10,00","Accueil","REF-OK","Ce produit doit passer"
+"Produit Erreur","20,50","Categorie_Inexistante","REF-ERR","Cette ligne doit afficher une erreur"
+"Autre Produit","5,25","Accueil","REF-OK2","Ce produit doit passer aussi"

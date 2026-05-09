@@ -1,0 +1,294 @@
+### Configuration
+@baseUrl = http://localhost/prestashop
+@wsKey = kqZubkmM41ZZ0X0oWO1LNhhW86kz84k4
+
+# Note: Le format par défaut est XML. Ajoutez ?output_format=JSON pour du JSON.
+# Note: L'authentification se fait via Authorization: Basic {{wsKey}} : (le colon est important)
+
+############################################################
+# 1. PARAMÈTRES GLOBAUX DE L'API
+############################################################
+
+### Liste de toutes les ressources disponibles
+# Permet de voir quels terminaux sont activés pour votre clé API.
+GET {{baseUrl}}/api/
+Authorization: Basic {{wsKey}} :
+
+### Paramètre : display
+# 'full' pour tous les champs, ou une liste [champ1,champ2]
+GET {{baseUrl}}/api/products?display=[id,name,price]
+Authorization: Basic {{wsKey}} :
+
+### Paramètre : filter
+# Filtrer par valeur exacte ou intervalle
+GET {{baseUrl}}/api/products?filter[id]=[1|5]&filter[active]=1
+Authorization: Basic {{wsKey}} :
+
+### Paramètre : sort
+# Trier par un ou plusieurs champs (ASC ou DESC)
+GET {{baseUrl}}/api/products?sort=[price_DESC,id_ASC]
+Authorization: Basic {{wsKey}} :
+
+### Paramètre : limit
+# Pagination : limit=nombre ou limit=début,nombre
+GET {{baseUrl}}/api/products?limit=5,10
+Authorization: Basic {{wsKey}} :
+
+### Paramètre : schema
+# synopsis : description technique des champs
+# blank : modèle XML vide pour POST/PUT
+GET {{baseUrl}}/api/products?schema=synopsis
+Authorization: Basic {{wsKey}} :
+
+### Paramètre : output_format
+# Forcer le format de sortie (JSON ou XML)
+GET {{baseUrl}}/api/products?output_format=JSON
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 2. CATALOGUE ET PRODUITS
+############################################################
+
+### Produits
+GET {{baseUrl}}/api/products?display=full
+Authorization: Basic {{wsKey}} :
+
+### Catégories
+GET {{baseUrl}}/api/categories?display=full
+Authorization: Basic {{wsKey}} :
+
+### Déclinaisons (Combinations)
+GET {{baseUrl}}/api/combinations?display=full
+Authorization: Basic {{wsKey}} :
+
+### Groupes d'attributs (Product Options)
+GET {{baseUrl}}/api/product_options?display=full
+Authorization: Basic {{wsKey}} :
+
+### Valeurs d'attributs (Product Option Values)
+GET {{baseUrl}}/api/product_option_values?display=full
+Authorization: Basic {{wsKey}} :
+
+### Caractéristiques (Product Features)
+GET {{baseUrl}}/api/product_features?display=full
+Authorization: Basic {{wsKey}} :
+
+### Valeurs de caractéristiques (Product Feature Values)
+GET {{baseUrl}}/api/product_feature_values?display=full
+Authorization: Basic {{wsKey}} :
+
+### Tags
+GET {{baseUrl}}/api/tags?display=full
+Authorization: Basic {{wsKey}} :
+
+### Pièces jointes (Attachments)
+GET {{baseUrl}}/api/attachments?display=full
+Authorization: Basic {{wsKey}} :
+
+### Types d'images
+GET {{baseUrl}}/api/image_types?display=full
+Authorization: Basic {{wsKey}} :
+
+### Prix spécifiques (Promotions)
+GET {{baseUrl}}/api/specific_prices?display=full
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 3. COMMANDES ET VENTES
+############################################################
+
+### Commandes
+GET {{baseUrl}}/api/orders?display=full
+Authorization: Basic {{wsKey}} :
+
+### Détails des commandes
+GET {{baseUrl}}/api/order_details?display=full
+Authorization: Basic {{wsKey}} :
+
+### Historique des statuts
+GET {{baseUrl}}/api/order_histories?display=full
+Authorization: Basic {{wsKey}} :
+
+### Factures
+GET {{baseUrl}}/api/order_invoices?display=full
+Authorization: Basic {{wsKey}} :
+
+### Paiements
+GET {{baseUrl}}/api/order_payments?display=full
+Authorization: Basic {{wsKey}} :
+
+### Bons de réduction / Avoirs (Slips)
+GET {{baseUrl}}/api/order_slips?display=full
+Authorization: Basic {{wsKey}} :
+
+### États de commande (Statuts)
+GET {{baseUrl}}/api/order_states?display=full
+Authorization: Basic {{wsKey}} :
+
+### Transporteurs de commande
+GET {{baseUrl}}/api/order_carriers?display=full
+Authorization: Basic {{wsKey}} :
+
+### Règles de panier appliquées
+GET {{baseUrl}}/api/order_cart_rules?display=full
+Authorization: Basic {{wsKey}} :
+
+### Paniers (Carts)
+GET {{baseUrl}}/api/carts?display=full
+Authorization: Basic {{wsKey}} :
+
+### Règles de panier (Vouchers)
+GET {{baseUrl}}/api/cart_rules?display=full
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 4. CLIENTS ET ADRESSES
+############################################################
+
+### Clients
+GET {{baseUrl}}/api/customers?display=full
+Authorization: Basic {{wsKey}} :
+
+### Adresses
+GET {{baseUrl}}/api/addresses?display=full
+Authorization: Basic {{wsKey}} :
+
+### Groupes de clients
+GET {{baseUrl}}/api/groups?display=full
+Authorization: Basic {{wsKey}} :
+
+### Invités (Guests)
+GET {{baseUrl}}/api/guests?display=full
+Authorization: Basic {{wsKey}} :
+
+### Titres de civilité (Genders)
+GET {{baseUrl}}/api/genders?display=full
+Authorization: Basic {{wsKey}} :
+
+### Fils de discussion SAV
+GET {{baseUrl}}/api/customer_threads?display=full
+Authorization: Basic {{wsKey}} :
+
+### Messages SAV
+GET {{baseUrl}}/api/customer_messages?display=full
+Authorization: Basic {{wsKey}} :
+
+### Contacts boutique
+GET {{baseUrl}}/api/contacts?display=full
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 5. STOCK ET LOGISTIQUE
+############################################################
+
+### Quantités disponibles (Stock Available)
+GET {{baseUrl}}/api/stock_availables?display=full
+Authorization: Basic {{wsKey}} :
+
+### Stocks (Inventaire physique)
+GET {{baseUrl}}/api/stocks?display=full
+Authorization: Basic {{wsKey}} :
+
+### Mouvements de stock
+GET {{baseUrl}}/api/stock_movements?display=full
+Authorization: Basic {{wsKey}} :
+
+### Motifs de mouvements
+GET {{baseUrl}}/api/stock_movement_reasons?display=full
+Authorization: Basic {{wsKey}} :
+
+### Entrepôts (Warehouses)
+GET {{baseUrl}}/api/warehouses?display=full
+Authorization: Basic {{wsKey}} :
+
+### Emplacements produits
+GET {{baseUrl}}/api/warehouse_product_locations?display=full
+Authorization: Basic {{wsKey}} :
+
+### Commandes fournisseurs
+GET {{baseUrl}}/api/supply_orders?display=full
+Authorization: Basic {{wsKey}} :
+
+### Transporteurs (Carriers)
+GET {{baseUrl}}/api/carriers?display=full
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 6. CONFIGURATION ET INTERNATIONAL
+############################################################
+
+### Langues
+GET {{baseUrl}}/api/languages?display=full
+Authorization: Basic {{wsKey}} :
+
+### Devises
+GET {{baseUrl}}/api/currencies?display=full
+Authorization: Basic {{wsKey}} :
+
+### Pays
+GET {{baseUrl}}/api/countries?display=full
+Authorization: Basic {{wsKey}} :
+
+### États / Provinces
+GET {{baseUrl}}/api/states?display=full
+Authorization: Basic {{wsKey}} :
+
+### Zones géographiques
+GET {{baseUrl}}/api/zones?display=full
+Authorization: Basic {{wsKey}} :
+
+### Taxes
+GET {{baseUrl}}/api/taxes?display=full
+Authorization: Basic {{wsKey}} :
+
+### Règles de taxes
+GET {{baseUrl}}/api/tax_rules?display=full
+Authorization: Basic {{wsKey}} :
+
+### Groupes de règles de taxes
+GET {{baseUrl}}/api/tax_rule_groups?display=full
+Authorization: Basic {{wsKey}} :
+
+### Boutiques (Multi-boutique)
+GET {{baseUrl}}/api/shops?display=full
+Authorization: Basic {{wsKey}} :
+
+### Groupes de boutiques
+GET {{baseUrl}}/api/shop_groups?display=full
+Authorization: Basic {{wsKey}} :
+
+### URLs des boutiques
+GET {{baseUrl}}/api/shop_urls?display=full
+Authorization: Basic {{wsKey}} :
+
+### Configuration générale
+GET {{baseUrl}}/api/configurations?display=full
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 7. AUTRES
+############################################################
+
+### Marques (Manufacturers)
+GET {{baseUrl}}/api/manufacturers?display=full
+Authorization: Basic {{wsKey}} :
+
+### Fournisseurs (Suppliers)
+GET {{baseUrl}}/api/suppliers?display=full
+Authorization: Basic {{wsKey}} :
+
+### CMS (Contenu)
+GET {{baseUrl}}/api/content_management_system?display=full
+Authorization: Basic {{wsKey}} :
+
+### Catégories CMS
+GET {{baseUrl}}/api/cms_categories?display=full
+Authorization: Basic {{wsKey}} :
+
+### Employés
+GET {{baseUrl}}/api/employees?display=full
+Authorization: Basic {{wsKey}} :
+
+### Recherche
+GET {{baseUrl}}/api/search?language=1&query=tshirt
+Authorization: Basic {{wsKey}} :

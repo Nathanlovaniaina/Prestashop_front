@@ -1,0 +1,4 @@
+Address ID;Alias*;Active (0/1);Customer e-mail*;Customer ID;Company;Lastname*;Firstname*;Address 1*;Address 2;Zipcode*;City*;Country*;Phone;Mobile Phone
+1;Home;1;john.doe@test.com;1;;Doe;John;123 Main St;;75001;Paris;France;0123456789;0612345678
+2;Work;1;jane.smith@test.com;2;Tech Corp;Smith;Jane;456 Business Ave;Suite 100;10001;New York;United States;0987654321;0712345678
+3;Home;1;bob.wilson@test.com;3;;Wilson;Bob;789 Garden Lane;;SW1A 1AA;London;United Kingdom;0201234567;0789012345

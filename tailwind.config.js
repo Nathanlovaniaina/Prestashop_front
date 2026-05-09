@@ -1,0 +1,2 @@
+// Tailwind désactivé
+export default {}

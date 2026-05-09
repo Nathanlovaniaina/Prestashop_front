@@ -1,0 +1,4 @@
+Customer ID;Active (0/1);Titles ID (Mr = 1, Ms = 2, else 0);Email *;Password *;Birthday (yyyy-mm-dd);Last Name *;First Name *;Newsletter (0/1);Opt-in (0/1);Registration date (yyyy-mm-dd);Groups (x,y,z...);Default group ID
+1;1;1;john.doe@test.com;password123;1990-05-15;Doe;John;1;0;2024-01-01;Customer;3
+2;1;2;jane.smith@test.com;securepass;1992-10-20;Smith;Jane;0;1;2024-02-15;Customer;3
+3;1;1;bob.wilson@test.com;bobpass;1985-03-12;Wilson;Bob;1;1;2024-03-10;Customer;3

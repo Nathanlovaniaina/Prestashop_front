@@ -1,0 +1,237 @@
+### Configuration
+@baseUrl = http://localhost/prestashop
+@wsKey = kqZubkmM41ZZ0X0oWO1LNhhW86kz84k4
+
+############################################################
+# 1. TESTS GLOBAUX (GET) AVEC TOUS LES PARAMÈTRES
+############################################################
+
+### TEST COMPLEXE : Produits filtrés, triés et paginés
+# Filtre: Prix entre 10 et 500, Actif
+# Tri: Prix Décroissant, ID Croissant
+# Pagination: Page 1 (offset 0, limit 10)
+# Format: JSON
+GET {{baseUrl}}/api/products?display=[id,name,price,active]&filter[price]=[10|500]&filter[active]=1&sort=[price_DESC,id_ASC]&limit=0,10&output_format=JSON
+Authorization: Basic {{wsKey}} :
+
+### TEST SCHEMA : Synopsis technique (pour comprendre les types)
+GET {{baseUrl}}/api/products?schema=synopsis
+Authorization: Basic {{wsKey}} :
+
+### TEST SCHEMA : Modèle vide (pour préparer un POST)
+GET {{baseUrl}}/api/products?schema=blank
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 2. CATALOGUE - TESTS DE CRÉATION (POST)
+############################################################
+
+### 2.1 Créer un PRODUIT complet
+POST {{baseUrl}}/api/products
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <product>
+    <id_category_default>2</id_category_default>
+    <id_tax_rules_group>1</id_tax_rules_group>
+    <reference>FULL-TEST-PROD</reference>
+    <price>99.99</price>
+    <active>1</active>
+    <available_for_order>1</available_for_order>
+    <show_price>1</show_price>
+    <condition>new</condition>
+    <visibility>both</visibility>
+    <name><language id="1">Produit de Test Exhaustif</language></name>
+    <description><language id="1"><![CDATA[Description détaillée avec <strong>HTML</strong>.]]></language></description>
+    <link_rewrite><language id="1">produit-test-exhaustif</language></link_rewrite>
+    <associations>
+      <categories>
+        <category><id>2</id></category>
+      </categories>
+    </associations>
+  </product>
+</prestashop>
+
+### 2.2 Créer une CATÉGORIE
+POST {{baseUrl}}/api/categories
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <category>
+    <id_parent>2</id_parent>
+    <active>1</active>
+    <name><language id="1">Nouvelle Catégorie Test</language></name>
+    <link_rewrite><language id="1">nouvelle-categorie-test</language></link_rewrite>
+    <description><language id="1">Description de la catégorie.</language></description>
+  </category>
+</prestashop>
+
+### 2.3 Créer une MARQUE (Manufacturer)
+POST {{baseUrl}}/api/manufacturers
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <manufacturer>
+    <name>Ma Super Marque</name>
+    <active>1</active>
+    <description><language id="1">Description de la marque.</language></description>
+  </manufacturer>
+</prestashop>
+
+############################################################
+# 3. CLIENTS ET ADRESSES - TESTS POST
+############################################################
+
+### 3.1 Créer un CLIENT
+POST {{baseUrl}}/api/customers
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <customer>
+    <firstname>Alice</firstname>
+    <lastname>Tester</lastname>
+    <email>alice.tester@example.com</email>
+    <passwd>securepass123</passwd>
+    <active>1</active>
+    <id_gender>2</id_gender>
+    <birthday>1995-05-15</birthday>
+  </customer>
+</prestashop>
+
+### 3.2 Créer une ADRESSE (Liée au client ID 1)
+POST {{baseUrl}}/api/addresses
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <address>
+    <id_customer>1</id_customer>
+    <id_country>8</id_country>
+    <alias>Mon Bureau</alias>
+    <lastname>Tester</lastname>
+    <firstname>Alice</firstname>
+    <address1>50 Avenue de la République</address1>
+    <city>Lyon</city>
+    <postcode>69000</postcode>
+  </address>
+</prestashop>
+
+############################################################
+# 4. COMMANDES ET PANIERS - TESTS POST
+############################################################
+
+### 4.1 Créer un PANIER (Cart)
+POST {{baseUrl}}/api/carts
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <cart>
+    <id_customer>1</id_customer>
+    <id_currency>1</id_currency>
+    <id_lang>1</id_lang>
+    <associations>
+      <cart_rows>
+        <cart_row>
+          <id_product>1</id_product>
+          <quantity>1</quantity>
+        </cart_row>
+      </cart_rows>
+    </associations>
+  </cart>
+</prestashop>
+
+### 4.2 Créer une COMMANDE (Order)
+POST {{baseUrl}}/api/orders
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <order>
+    <id_address_delivery>1</id_address_delivery>
+    <id_address_invoice>1</id_address_invoice>
+    <id_cart>1</id_cart>
+    <id_currency>1</id_currency>
+    <id_lang>1</id_lang>
+    <id_customer>1</id_customer>
+    <id_carrier>1</id_carrier>
+    <current_state>2</current_state>
+    <payment>Paiement par chèque</payment>
+    <module>ps_checkpayment</module>
+    <total_paid>10.00</total_paid>
+    <total_paid_real>10.00</total_paid_real>
+    <total_products>8.33</total_products>
+    <total_products_wt>10.00</total_products_wt>
+    <total_shipping>0.00</total_shipping>
+    <valid>1</valid>
+    <associations>
+      <order_rows>
+        <order_row>
+          <product_id>1</product_id>
+          <product_quantity>1</product_quantity>
+          <product_name>Produit Test</product_name>
+          <product_price>8.33</product_price>
+        </order_row>
+      </order_rows>
+    </associations>
+  </order>
+</prestashop>
+
+############################################################
+# 5. STOCK ET LOGISTIQUE - TESTS PUT
+############################################################
+
+### 5.1 Mettre à jour le STOCK (Stock Available)
+# Note: On utilise PUT car la ressource existe déjà pour le produit.
+PUT {{baseUrl}}/api/stock_availables/1
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <stock_available>
+    <id>1</id>
+    <id_product>1</id_product>
+    <id_product_attribute>0</id_product_attribute>
+    <quantity>500</quantity>
+    <depends_on_stock>0</depends_on_stock>
+    <out_of_stock>2</out_of_stock>
+  </stock_available>
+</prestashop>
+
+############################################################
+# 6. INTERNATIONAL - TESTS POST
+############################################################
+
+### 6.1 Créer une TAXE
+POST {{baseUrl}}/api/taxes
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <tax>
+    <rate>20.000</rate>
+    <active>1</active>
+    <name><language id="1">TVA FR 20%</language></name>
+  </tax>
+</prestashop>
+
+### 6.2 Créer un PAYS
+POST {{baseUrl}}/api/countries
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <country>
+    <id_zone>1</id_zone>
+    <iso_code>ZZ</iso_code>
+    <active>1</active>
+    <contains_states>0</contains_states>
+    <need_zip_code>1</need_zip_code>
+    <zip_code_format>NNNNN</zip_code_format>
+    <name><language id="1">Pays Imaginaire</language></name>
+  </country>
+</prestashop>

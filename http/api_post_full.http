@@ -1,0 +1,271 @@
+### Configuration
+@baseUrl = http://localhost/prestashop
+@wsKey = kqZubkmM41ZZ0X0oWO1LNhhW86kz84k4
+
+# Note: Pour chaque entité, vous pouvez obtenir le schéma vide complet via :
+# GET {{baseUrl}}/api/ENTITY?schema=blank
+
+############################################################
+# PRIORITÉ 1 : PAYS ET LANGUES (Indépendant)
+############################################################
+
+### 1.1 Ajouter une LANGUE
+# Champs obligatoires : name, iso_code, language_code
+POST {{baseUrl}}/api/languages
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <language>
+    <name>Français (France)</name> <!-- Nom de la langue -->
+    <iso_code>fr</iso_code> <!-- Code ISO 639-1 (2 lettres) -->
+    <language_code>fr-fr</language_code> <!-- Code IETF (ex: fr-fr, en-us) -->
+    <active>1</active> <!-- État d'activation (1: Actif, 0: Inactif) -->
+    <is_rtl>0</is_rtl> <!-- Écriture de droite à gauche (1: Oui, 0: Non) -->
+    <date_format_lite>Y-m-d</date_format_lite> <!-- Format date courte (PHP date) -->
+    <date_format_full>Y-m-d H:i:s</date_format_full> <!-- Format date complète (PHP date) -->
+  </language>
+</prestashop>
+
+### 1.2 Ajouter un PAYS
+# Champs obligatoires : name (multilang), id_zone, iso_code, contains_states, need_zip_code, zip_code_format, display_tax_label
+POST {{baseUrl}}/api/countries
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <country>
+    <id_zone>1</id_zone> <!-- ID de la Zone géographique (ex: Europe, Amérique du Nord) -->
+    <id_currency>1</id_currency> <!-- ID de la devise par défaut du pays -->
+    <iso_code>FR</iso_code> <!-- Code ISO 3166-1 alpha-2 (ex: FR, US, GB) -->
+    <call_prefix>33</call_prefix> <!-- Préfixe téléphonique international (ex: 33 pour la France) -->
+    <active>1</active> <!-- État d'activation (1: Actif, 0: Inactif) -->
+    <contains_states>0</contains_states> <!-- Indique si le pays possède des états/provinces (1: Oui, 0: Non) -->
+    <need_identification_number>0</need_identification_number> <!-- Nécessite un numéro d'identification fiscale (1: Oui, 0: Non) -->
+    <need_zip_code>1</need_zip_code> <!-- Nécessite un code postal pour les adresses (1: Oui, 0: Non) -->
+    <zip_code_format>NNNNN</zip_code_format> <!-- Format du code postal (N: chiffre, L: lettre, C: code pays) -->
+    <display_tax_label>1</display_tax_label> <!-- Afficher le libellé de la taxe (ex: TTC) (1: Oui, 0: Non) -->
+    <name>
+      <language id="1">France</language> <!-- Nom du pays dans la langue ID 1 -->
+    </name>
+  </country>
+</prestashop>
+
+############################################################
+# PRIORITÉ 2 : CATÉGORIES (Dépend de Catégorie Parente)
+############################################################
+
+### 2.1 Ajouter une CATÉGORIE
+# Champs obligatoires : name, link_rewrite
+POST {{baseUrl}}/api/categories
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <category>
+    <id_parent>2</id_parent> <!-- ID de la catégorie parente (2: Accueil par défaut) -->
+    <active>1</active> <!-- État d'activation de la catégorie -->
+    <is_root_category>0</is_root_category> <!-- Est une catégorie racine (1: Oui, 0: Non) -->
+    <position>1</position> <!-- Position d'affichage parmi les catégories de même niveau -->
+    <name><language id="1">Électronique</language></name> <!-- Nom de la catégorie -->
+    <link_rewrite><language id="1">electronique</language></link_rewrite> <!-- URL simplifiée (slug) -->
+    <description><language id="1">Tous les gadgets électroniques</language></description> <!-- Description détaillée -->
+    <meta_title><language id="1">Électronique - Ma Boutique</language></meta_title> <!-- Titre SEO (Balise Title) -->
+    <meta_description><language id="1">Découvrez notre gamme électronique</language></meta_description> <!-- Description SEO (Meta Description) -->
+    <meta_keywords><language id="1">gadget, tech, smartphone</language></meta_keywords> <!-- Mots-clés SEO (obsolète mais présent) -->
+  </category>
+</prestashop>
+
+############################################################
+# PRIORITÉ 3 : CLIENTS (Dépend de Groupes)
+############################################################
+
+### 3.1 Ajouter un CLIENT
+# Champs obligatoires : lastname, firstname, email, passwd
+POST {{baseUrl}}/api/customers
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <customer>
+    <id_default_group>3</id_default_group> <!-- Groupe par défaut (3: Client, 2: Invité, 1: Visiteur) -->
+    <id_gender>1</id_gender> <!-- Civilité (1: M., 2: Mme) -->
+    <id_lang>1</id_lang> <!-- ID de la langue préférée du client -->
+    <firstname>Jean</firstname> <!-- Prénom du client -->
+    <lastname>Dupont</lastname> <!-- Nom de famille du client -->
+    <email>jean.dupont@example.com</email> <!-- Adresse e-mail (Unique) -->
+    <passwd>password123</passwd> <!-- Mot de passe (sera hashé par PrestaShop) -->
+    <birthday>1990-01-01</birthday> <!-- Date de naissance (YYYY-MM-DD) -->
+    <newsletter>1</newsletter> <!-- Inscription à la newsletter (1: Oui, 0: Non) -->
+    <optin>0</optin> <!-- Inscription aux offres partenaires (1: Oui, 0: Non) -->
+    <website>https://www.example.com</website> <!-- Site web du client -->
+    <company>Ma Société</company> <!-- Nom de l'entreprise -->
+    <siret>123456789</siret> <!-- Numéro SIRET -->
+    <ape>6201Z</ape> <!-- Code APE -->
+    <outstanding_allow_amount>0.00</outstanding_allow_amount> <!-- Montant d'encours autorisé (B2B) -->
+    <show_public_prices>0</show_public_prices> <!-- Afficher les prix publics (B2B) -->
+    <max_payment_days>30</max_payment_days> <!-- Délai maximum de paiement en jours -->
+    <active>1</active> <!-- Compte actif (1: Oui, 0: Non) -->
+    <is_guest>0</is_guest> <!-- Compte invité (1: Oui, 0: Non) -->
+    <id_shop>1</id_shop> <!-- ID de la boutique associée -->
+    <id_shop_group>1</id_shop_group> <!-- ID du groupe de boutiques associé -->
+    <associations>
+      <groups>
+        <group><id>3</id></group> <!-- Liste des IDs de groupes auxquels appartient le client -->
+      </groups>
+    </associations>
+  </customer>
+</prestashop>
+
+############################################################
+# PRIORITÉ 4 : ADRESSES (Dépend de Client + Pays)
+############################################################
+
+### 4.1 Ajouter une ADRESSE
+# Champs obligatoires : id_customer (ou id_manufacturer/supplier), alias, lastname, firstname, address1, city, id_country
+POST {{baseUrl}}/api/addresses
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <address>
+    <id_customer>1</id_customer> <!-- ID du client propriétaire de l'adresse -->
+    <id_country>8</id_country> <!-- ID du pays (8: France par défaut) -->
+    <id_state>0</id_state> <!-- ID de l'état/département (requis si contains_states=1 pour le pays) -->
+    <alias>Domicile</alias> <!-- Nom de l'adresse pour le client (ex: Maison, Bureau) -->
+    <company>Indépendant</company> <!-- Nom de l'entreprise pour cette adresse -->
+    <lastname>Dupont</lastname> <!-- Nom de famille figurant sur l'adresse -->
+    <firstname>Jean</firstname> <!-- Prénom figurant sur l'adresse -->
+    <vat_number>FR123456789</vat_number> <!-- Numéro de TVA intra-communautaire -->
+    <dni>12345678X</dni> <!-- Numéro d'identification fiscale (Espagne, Italie...) -->
+    <address1>10 Rue du Commerce</address1> <!-- Ligne d'adresse 1 (principale) -->
+    <address2>Appartement 4B</address2> <!-- Ligne d'adresse 2 (complément) -->
+    <postcode>75001</postcode> <!-- Code postal -->
+    <city>Paris</city> <!-- Ville -->
+    <other>Informations complémentaires pour le livreur</other> <!-- Notes additionnelles -->
+    <phone>0123456789</phone> <!-- Numéro de téléphone fixe -->
+    <phone_mobile>0612345678</phone_mobile> <!-- Numéro de téléphone mobile -->
+  </address>
+</prestashop>
+
+############################################################
+# PRIORITÉ 5 : PRODUITS (Dépend de Catégorie + Marque)
+############################################################
+
+### 5.1 Ajouter un PRODUIT (Complet)
+# Champs obligatoires : name, link_rewrite, id_category_default, price
+POST {{baseUrl}}/api/products
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <product>
+    <id_manufacturer>1</id_manufacturer> <!-- ID du fabricant/marque -->
+    <id_supplier>1</id_supplier> <!-- ID du fournisseur par défaut -->
+    <id_category_default>3</id_category_default> <!-- ID de la catégorie principale -->
+    <id_tax_rules_group>1</id_tax_rules_group> <!-- ID du groupe de règles de taxes -->
+    <type>simple</type> <!-- Type de produit (simple, pack, virtual) -->
+    <reference>REF-PROD-001</reference> <!-- Référence interne -->
+    <supplier_reference>SUP-REF-99</supplier_reference> <!-- Référence fournisseur -->
+    <location>Allée A-12</location> <!-- Emplacement dans l'entrepôt -->
+    <width>10.50</width> <!-- Largeur du colis (cm) -->
+    <height>20.00</height> <!-- Hauteur du colis (cm) -->
+    <depth>5.00</depth> <!-- Profondeur du colis (cm) -->
+    <weight>0.500</weight> <!-- Poids du produit (kg) -->
+    <ean13>1234567890123</ean13> <!-- Code barre EAN-13 -->
+    <isbn>0123456789</isbn> <!-- Code ISBN (pour les livres) -->
+    <upc>123456789012</upc> <!-- Code barre UPC -->
+    <mpn>MPN-001</mpn> <!-- Référence fabricant (Manufacturer Part Number) -->
+    <price>19.99</price> <!-- Prix de vente Hors Taxes (HT) -->
+    <wholesale_price>10.00</wholesale_price> <!-- Prix d'achat (prix de gros) HT -->
+    <unity>Pièce</unity> <!-- Unité de vente (ex: kg, litre, pièce) -->
+    <unit_price_ratio>1.00</unit_price_ratio> <!-- Ratio pour le prix à l'unité (ex: prix/kg) -->
+    <additional_shipping_cost>2.50</additional_shipping_cost> <!-- Frais de port additionnels par produit -->
+    <active>1</active> <!-- Produit activé et visible (1: Oui, 0: Non) -->
+    <on_sale>0</on_sale> <!-- Affiche une icône "Promo" (1: Oui, 0: Non) -->
+    <online_only>0</online_only> <!-- Produit vendu exclusivement en ligne (1: Oui, 0: Non) -->
+    <ecotax>0.15</ecotax> <!-- Éco-participation TTC -->
+    <minimal_quantity>1</minimal_quantity> <!-- Quantité minimale pour commander -->
+    <low_stock_threshold>5</low_stock_threshold> <!-- Seuil de stock faible pour alerte -->
+    <low_stock_alert>1</low_stock_alert> <!-- Envoyer une alerte si stock faible (1: Oui, 0: Non) -->
+    <available_for_order>1</available_for_order> <!-- Autoriser la commande (1: Oui, 0: Non) -->
+    <show_price>1</show_price> <!-- Afficher le prix (1: Oui, 0: Non) -->
+    <condition>new</condition> <!-- État du produit (new, used, refurbished) -->
+    <visibility>both</visibility> <!-- Visibilité (both, catalog, search, none) -->
+    <advanced_stock_management>0</advanced_stock_management> <!-- Gestion de stock avancée (1: Oui, 0: Non) -->
+    <name><language id="1">Smartphone Ultra Z</language></name> <!-- Nom du produit -->
+    <link_rewrite><language id="1">smartphone-ultra-z</language></link_rewrite> <!-- URL simplifiée (slug) -->
+    <description><language id="1"><![CDATA[<strong>Description complète</strong> en HTML possible ici.]]></language></description> <!-- Description longue (HTML possible) -->
+    <description_short><language id="1">Résumé du produit pour la liste.</language></description_short> <!-- Description courte -->
+    <available_now><language id="1">En stock</language></available_now> <!-- Texte affiché quand en stock -->
+    <available_later><language id="1">Expédié sous 5 jours</language></available_later> <!-- Texte affiché quand hors stock mais commandable -->
+    <meta_title><language id="1">Smartphone Ultra Z - Meilleur Prix</language></meta_title> <!-- Titre SEO -->
+    <meta_description><language id="1">Achetez le nouveau Smartphone Ultra Z au meilleur prix.</language></meta_description> <!-- Meta Description SEO -->
+    <meta_keywords><language id="1">smartphone, tech, android</language></meta_keywords> <!-- Meta Keywords SEO -->
+    <associations>
+      <categories>
+        <category><id>2</id></category> <!-- Liste des IDs des catégories auxquelles appartient le produit -->
+        <category><id>3</id></category>
+      </categories>
+      <product_features>
+        <product_feature>
+          <id>1</id> <!-- ID de la caractéristique (Feature) -->
+          <id_feature_value>5</id_feature_value> <!-- ID de la valeur de caractéristique -->
+        </product_feature>
+      </product_features>
+      <tags>
+        <tag><id>1</id></tag> <!-- Liste des IDs de tags associés -->
+      </tags>
+    </associations>
+  </product>
+</prestashop>
+
+############################################################
+# PRIORITÉ 6 : COMMANDES (Dépend de Client + Adresse + Transporteur + Panier)
+############################################################
+
+### 6.1 Ajouter une COMMANDE (Structure Complète)
+# Note: id_cart est l'élément central reliant les produits avant la commande.
+POST {{baseUrl}}/api/orders
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <order>
+    <id_address_delivery>1</id_address_delivery> <!-- ID de l'adresse de livraison -->
+    <id_address_invoice>1</id_address_invoice> <!-- ID de l'adresse de facturation -->
+    <id_cart>1</id_cart> <!-- ID du panier d'origine -->
+    <id_currency>1</id_currency> <!-- ID de la devise utilisée -->
+    <id_lang>1</id_lang> <!-- ID de la langue de la commande -->
+    <id_customer>1</id_customer> <!-- ID du client ayant passé commande -->
+    <id_carrier>1</id_carrier> <!-- ID du transporteur choisi -->
+    <current_state>2</current_state> <!-- ID du statut de commande actuel (2: Paiement accepté, 3: Préparation...) -->
+    <module>ps_checkpayment</module> <!-- Nom technique du module de paiement utilisé -->
+    <payment>Chèque</payment> <!-- Nom public de la méthode de paiement -->
+    <total_paid>25.00</total_paid> <!-- Montant total payé par le client TTC -->
+    <total_paid_real>25.00</total_paid_real> <!-- Montant réellement encaissé -->
+    <total_products>20.00</total_products> <!-- Montant total des produits Hors Taxes (HT) -->
+    <total_products_wt>24.00</total_products_wt> <!-- Montant total des produits Toutes Taxes Comprises (TTC) -->
+    <total_shipping>1.00</total_shipping> <!-- Montant total des frais de port TTC -->
+    <total_shipping_tax_incl>1.00</total_shipping_tax_incl> <!-- Frais de port TTC -->
+    <total_shipping_tax_excl>1.00</total_shipping_tax_excl> <!-- Frais de port HT -->
+    <total_discounts>0.00</total_discounts> <!-- Montant total des remises TTC -->
+    <total_wrapping>0.00</total_wrapping> <!-- Montant total de l'emballage cadeau TTC -->
+    <shipping_number>FR-SHIP-123</shipping_number> <!-- Numéro de suivi du colis -->
+    <valid>1</valid> <!-- Commande valide (1: Oui, 0: Non) -->
+    <associations>
+      <order_rows>
+        <order_row>
+          <product_id>1</product_id> <!-- ID du produit commandé -->
+          <product_attribute_id>0</product_attribute_id> <!-- ID de la déclinaison (0 si produit simple) -->
+          <product_quantity>1</product_quantity> <!-- Quantité commandée -->
+          <product_name>Smartphone Ultra Z</product_name> <!-- Nom du produit au moment de la commande -->
+          <product_reference>REF-PROD-001</product_reference> <!-- Référence du produit -->
+          <product_price>19.99</product_price> <!-- Prix unitaire Hors Taxes (HT) -->
+          <unit_price_tax_incl>24.00</unit_price_tax_incl> <!-- Prix unitaire TTC -->
+          <unit_price_tax_excl>20.00</unit_price_tax_excl> <!-- Prix unitaire HT -->
+        </order_row>
+      </order_rows>
+    </associations>
+  </order>
+</prestashop>

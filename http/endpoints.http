@@ -1,0 +1,536 @@
+### Configuration
+@baseUrl = http://localhost/prestashop
+@wsKey = kqZubkmM41ZZ0X0oWO1LNhhW86kz84k4
+@clientId = YOUR_CLIENT_ID_HERE
+@clientSecret = YOUR_CLIENT_SECRET_HERE
+@accessToken = YOUR_ACCESS_TOKEN_HERE
+
+# Note: Le format par défaut est le XML
+# Note: L'authentification se fait via Authorization: Basic {{wsKey}} :
+# Note: Pour le POST/PUT, utiliser Content-Type: text/xml
+
+############################################################
+# 1. CATALOGUE PRODUITS (Complet)
+############################################################
+
+### Liste tous les produits
+GET {{baseUrl}}/api/products?display=[id,name,price,active]
+Authorization: Basic {{wsKey}} :
+
+### Détail d'un produit (ex: ID 1)
+GET {{baseUrl}}/api/products/20
+Authorization: Basic {{wsKey}} :
+
+### Schémas de création (Synopsis et Blanc)
+GET {{baseUrl}}/api/products?schema=synopsis
+Authorization: Basic {{wsKey}} :
+
+GET {{baseUrl}}/api/products?schema=blank
+Authorization: Basic {{wsKey}} :
+
+### Ajouter un nouveau produit
+# POST: Envoyer un XML encapsulé dans <prestashop><product>...</product></prestashop>.
+# Les champs obligatoires sont 'name', 'link_rewrite' et 'id_category_default'.
+# Utilisez ?schema=blank pour obtenir un modèle XML vide complet.
+POST {{baseUrl}}/api/products
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <product>
+    <name><language id="1">Nouveau Produit</language></name>
+    <link_rewrite><language id="1">nouveau-produit</language></link_rewrite>
+    <id_category_default>2</id_category_default>
+    <price>19.90</price>
+    <active>1</active>
+  </product>
+</prestashop>
+
+### Modifier un produit (ex: ID 1)
+# PUT: Envoyer le XML complet incluant l'ID de la ressource.
+# Il est fortement recommandé de faire un GET, de modifier le XML reçu, puis de le renvoyer.
+# Note: L'ID dans le XML doit correspondre à l'ID dans l'URL.
+PUT {{baseUrl}}/api/products/20
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <product>
+    <id>20</id>
+    <price>25.00</price>
+    <active>1</active>
+  </product>
+</prestashop>
+
+### Gestion de l'arborescence des catégories
+GET {{baseUrl}}/api/categories?display=[id,name,active]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter une catégorie
+# POST: Requiert 'name', 'link_rewrite' et 'active'.
+POST {{baseUrl}}/api/categories
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <category>
+    <name><language id="1">Nouvelle Catégorie</language></name>
+    <link_rewrite><language id="1">nouvelle-categorie</language></link_rewrite>
+    <active>1</active>
+    <id_parent>2</id_parent>
+  </category>
+</prestashop>
+
+### Modifier une catégorie (ex: ID 3)
+# PUT: Permet de changer le parent ou le nom d'une catégorie existante.
+PUT {{baseUrl}}/api/categories/3
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <category>
+    <id>3</id>
+    <name><language id="1">Nom Catégorie Modifié</language></name>
+  </category>
+</prestashop>
+
+### Gestion des déclinaisons (combinations)
+GET {{baseUrl}}/api/combinations?display=[id,id_product,reference]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter une déclinaison (ex: pour le produit ID 1)
+# POST: Relie un produit à un ensemble d'attributs. Nécessite 'id_product'.
+POST {{baseUrl}}/api/combinations
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <combination>
+    <id_product>1</id_product>
+    <reference>REF-COL-XL</reference>
+    <price>2.00</price>
+    <quantity>50</quantity>
+    <associations>
+      <product_option_values>
+        <product_option_value><id>1</id></product_option_value>
+      </product_option_values>
+    </associations>
+  </combination>
+</prestashop>
+
+### Options de produits (Groupes d'attributs)
+GET {{baseUrl}}/api/product_options?display=[id,name,public_name]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter une option (ex: Taille)
+# POST: Requiert 'name' et 'public_name' (multilingue).
+POST {{baseUrl}}/api/product_options
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <product_option>
+    <name><language id="1">Taille</language></name>
+    <public_name><language id="1">Taille</language></public_name>
+    <group_type>select</group_type>
+  </product_option>
+</prestashop>
+
+### Valeurs des options de produits (Attributs)
+GET {{baseUrl}}/api/product_option_values?display=[id,id_attribute_group,name]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter une valeur d'option (ex: XL)
+# POST: Requiert 'id_attribute_group' (ID de l'option) et 'name'.
+POST {{baseUrl}}/api/product_option_values
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <product_option_value>
+    <id_attribute_group>1</id_attribute_group>
+    <name><language id="1">XL</language></name>
+  </product_option_value>
+</prestashop>
+
+### Caractéristiques des produits (Features)
+GET {{baseUrl}}/api/product_features?display=[id,name]
+Authorization: Basic {{wsKey}} :
+
+### Valeurs des caractéristiques (Feature Values)
+GET {{baseUrl}}/api/product_feature_values?display=[id,id_feature,value]
+Authorization: Basic {{wsKey}} :
+
+### Pièces jointes des produits
+GET {{baseUrl}}/api/attachments
+Authorization: Basic {{wsKey}} :
+
+### Champs de personnalisation
+GET {{baseUrl}}/api/product_customization_fields
+Authorization: Basic {{wsKey}} :
+
+### Personnalisations
+GET {{baseUrl}}/api/customizations
+Authorization: Basic {{wsKey}} :
+
+### Tags produits
+GET {{baseUrl}}/api/tags?display=[id,name]
+Authorization: Basic {{wsKey}} :
+
+### Images (Gestion spécifique)
+GET {{baseUrl}}/api/images/products/1
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 2. COMMANDES, VENTES ET SERVICES
+############################################################
+
+### Liste des commandes
+GET {{baseUrl}}/api/orders?display=[id,reference,id_customer,total_paid,payment,date_add]
+Authorization: Basic {{wsKey}} :
+
+### Détails des commandes
+GET {{baseUrl}}/api/order_details?display=[id,id_order,product_id,product_name,product_quantity,unit_price_tax_incl]
+Authorization: Basic {{wsKey}} :
+
+### Historique des commandes
+GET {{baseUrl}}/api/order_histories?display=[id,id_order,id_order_state,date_add]
+Authorization: Basic {{wsKey}} :
+
+### Factures des commandes
+GET {{baseUrl}}/api/order_invoices?display=[id,id_order,number,delivery_number,total_paid_tax_incl,date_add]
+Authorization: Basic {{wsKey}} :
+
+### Règlements des commandes
+GET {{baseUrl}}/api/order_payments?display=[id,order_reference,amount,payment_method,date_add]
+Authorization: Basic {{wsKey}} :
+
+### Statuts de commande
+GET {{baseUrl}}/api/order_states?display=[id,name]
+Authorization: Basic {{wsKey}} :
+
+### Bons de livraison (Slips)
+GET {{baseUrl}}/api/order_slip
+Authorization: Basic {{wsKey}} :
+
+### Transporteurs de commande
+GET {{baseUrl}}/api/order_carriers
+Authorization: Basic {{wsKey}} :
+
+### Règles de panier appliquées aux commandes
+GET {{baseUrl}}/api/order_cart_rules
+Authorization: Basic {{wsKey}} :
+
+### Paniers (Carts)
+GET {{baseUrl}}/api/carts?display=[id,id_customer,id_currency,date_add,date_upd]
+Authorization: Basic {{wsKey}} :
+
+### Créer un panier
+# POST: Permet de préparer une commande. Requiert 'id_customer', 'id_currency' et 'id_lang'.
+POST {{baseUrl}}/api/carts
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <cart>
+    <id_customer>1</id_customer>
+    <id_currency>1</id_currency>
+    <id_lang>1</id_lang>
+    <associations>
+      <cart_rows>
+        <cart_row>
+          <id_product>1</id_product>
+          <quantity>2</quantity>
+        </cart_row>
+      </cart_rows>
+    </associations>
+  </cart>
+</prestashop>
+
+### Règles de panier (Vouchers)
+GET {{baseUrl}}/api/cart_rules?display=[id,name,code,active]
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 3. CLIENTS ET MESSAGERIE
+############################################################
+
+### Clients
+GET {{baseUrl}}/api/customers?display=[id,lastname,firstname,email,active]
+Authorization: Basic {{wsKey}} :
+
+### Créer un client
+# POST: 'lastname', 'firstname', 'email' et 'passwd' (hashé ou clair selon config) sont requis.
+POST {{baseUrl}}/api/customers
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <customer>
+    <lastname>Dupont</lastname>
+    <firstname>Jean</firstname>
+    <email>jean.dupont@example.com</email>
+    <passwd>motdepasse123</passwd>
+    <active>1</active>
+  </customer>
+</prestashop>
+
+### Modifier un client (ex: ID 1)
+# PUT: Pour changer l'email ou le statut d'un client.
+PUT {{baseUrl}}/api/customers/1
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <customer>
+    <id>1</id>
+    <email>nouveau.email@example.com</email>
+  </customer>
+</prestashop>
+
+### Adresses
+GET {{baseUrl}}/api/addresses?display=[id,alias,lastname,firstname,city,postcode,id_country]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter une adresse
+# POST: Requiert 'id_customer' (ou id_manufacturer/supplier), 'alias', 'lastname', 'firstname', 'address1', 'city', 'postcode', 'id_country'.
+POST {{baseUrl}}/api/addresses
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <address>
+    <id_customer>1</id_customer>
+    <alias>Ma Maison</alias>
+    <lastname>Dupont</lastname>
+    <firstname>Jean</firstname>
+    <address1>123 Rue de la Paix</address1>
+    <city>Paris</city>
+    <postcode>75001</postcode>
+    <id_country>8</id_country>
+  </address>
+</prestashop>
+
+### Groupes de clients
+GET {{baseUrl}}/api/groups?display=[id,name]
+Authorization: Basic {{wsKey}} :
+
+### Invités (Guests)
+GET {{baseUrl}}/api/guests
+Authorization: Basic {{wsKey}} :
+
+### Fils de discussion SAV
+GET {{baseUrl}}/api/customer_threads
+Authorization: Basic {{wsKey}} :
+
+### Messages SAV
+GET {{baseUrl}}/api/customer_messages
+Authorization: Basic {{wsKey}} :
+
+### Messages internes
+GET {{baseUrl}}/api/messages
+Authorization: Basic {{wsKey}} :
+
+### Contacts boutique
+GET {{baseUrl}}/api/contacts?display=[id,name,email]
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 4. STOCK ET LOGISTIQUE
+############################################################
+
+### Quantités disponibles (Stock Available)
+GET {{baseUrl}}/api/stock_availables?display=[id,id_product,id_product_attribute,quantity]
+Authorization: Basic {{wsKey}} :
+
+### Modifier le stock (ex: ID 1)
+# PUT: C'est l'endpoint principal pour mettre à jour les quantités. 
+# 'id', 'id_product', 'id_product_attribute' et 'quantity' sont nécessaires.
+# Note: L'id_shop est souvent requis en mode multi-boutique.
+PUT {{baseUrl}}/api/stock_availables/1
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <stock_available>
+    <id>1</id>
+    <id_product>1</id_product>
+    <id_product_attribute>0</id_product_attribute>
+    <quantity>100</quantity>
+    <depends_on_stock>0</depends_on_stock>
+    <out_of_stock>2</out_of_stock>
+  </stock_available>
+</prestashop>
+
+### Stocks (Inventaire réel)
+GET {{baseUrl}}/api/stocks?display=[id,id_product,id_product_attribute,physical_quantity,usable_quantity]
+Authorization: Basic {{wsKey}} :
+
+### Mouvements de stock
+GET {{baseUrl}}/api/stock_movements
+Authorization: Basic {{wsKey}} :
+
+### Motifs de mouvements de stock
+GET {{baseUrl}}/api/stock_movement_reasons
+Authorization: Basic {{wsKey}} :
+
+### Entrepôts (Warehouses)
+GET {{baseUrl}}/api/warehouses?display=[id,name]
+Authorization: Basic {{wsKey}} :
+
+### Emplacements produits dans entrepôts
+GET {{baseUrl}}/api/warehouse_product_locations
+Authorization: Basic {{wsKey}} :
+
+### Commandes fournisseurs (Supply Orders)
+GET {{baseUrl}}/api/supply_orders
+Authorization: Basic {{wsKey}} :
+
+### Détails commandes fournisseurs
+GET {{baseUrl}}/api/supply_order_details
+Authorization: Basic {{wsKey}} :
+
+### Fournisseurs de produits
+GET {{baseUrl}}/api/product_suppliers?display=[id,id_product,id_product_attribute,id_supplier,product_supplier_reference]
+Authorization: Basic {{wsKey}} :
+
+### Livraisons
+GET {{baseUrl}}/api/deliveries
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 5. CONFIGURATION ET INTERNATIONAL
+############################################################
+
+### Configuration boutique
+GET {{baseUrl}}/api/configurations
+Authorization: Basic {{wsKey}} :
+
+### Langues
+GET {{baseUrl}}/api/languages?display=[id,name,iso_code,active]
+Authorization: Basic {{wsKey}} :
+
+### Devises
+GET {{baseUrl}}/api/currencies?display=[id,name,iso_code,active]
+Authorization: Basic {{wsKey}} :
+
+### Pays
+GET {{baseUrl}}/api/countries?display=[id,name,iso_code,active]
+Authorization: Basic {{wsKey}} :
+
+### États / Provinces
+GET {{baseUrl}}/api/states?display=[id,id_country,name,iso_code,active]
+Authorization: Basic {{wsKey}} :
+
+### Zones géographiques
+GET {{baseUrl}}/api/zones?display=[id,name,active]
+Authorization: Basic {{wsKey}} :
+
+### Taxes
+GET {{baseUrl}}/api/taxes?display=[id,name,rate,active]
+Authorization: Basic {{wsKey}} :
+
+### Règles de taxes
+GET {{baseUrl}}/api/tax_rules
+Authorization: Basic {{wsKey}} :
+
+### Groupes de règles de taxes
+GET {{baseUrl}}/api/tax_rule_groups
+Authorization: Basic {{wsKey}} :
+
+### Boutiques (Multi-boutique)
+GET {{baseUrl}}/api/shops?display=[id,name,active]
+Authorization: Basic {{wsKey}} :
+
+### Groupes de boutiques
+GET {{baseUrl}}/api/shop_groups
+Authorization: Basic {{wsKey}} :
+
+### URLs des boutiques
+GET {{baseUrl}}/api/shop_urls
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 6. AUTRES RESSOURCES
+############################################################
+
+### Marques / Fabricants
+GET {{baseUrl}}/api/manufacturers?display=[id,name,active]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter un fabricant
+# POST: Requiert 'name' et 'active'.
+POST {{baseUrl}}/api/manufacturers
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <manufacturer>
+    <name>Ma Nouvelle Marque</name>
+    <active>1</active>
+  </manufacturer>
+</prestashop>
+
+### Modifier un fabricant (ex: ID 1)
+# PUT: Pour modifier le nom ou activer/désactiver.
+PUT {{baseUrl}}/api/manufacturers/1
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <manufacturer>
+    <id>1</id>
+    <name>Marque Mise à Jour</name>
+  </manufacturer>
+</prestashop>
+
+### Fournisseurs
+GET {{baseUrl}}/api/suppliers?display=[id,name,active]
+Authorization: Basic {{wsKey}} :
+
+### Ajouter un fournisseur
+# POST: Requiert 'name' et 'active'.
+POST {{baseUrl}}/api/suppliers
+Authorization: Basic {{wsKey}} :
+Content-Type: text/xml
+
+<prestashop>
+  <supplier>
+    <name>Mon Nouveau Fournisseur</name>
+    <active>1</active>
+  </supplier>
+</prestashop>
+
+### CMS (Pages de contenu)
+GET {{baseUrl}}/api/content_management_system?display=[id,id_cms_category,active]
+Authorization: Basic {{wsKey}} :
+
+### Employés
+GET {{baseUrl}}/api/employees?display=[id,lastname,firstname,email,active]
+Authorization: Basic {{wsKey}} :
+
+### Types d'images
+GET {{baseUrl}}/api/image_types
+Authorization: Basic {{wsKey}} :
+
+### Prix spécifiques (Remises)
+GET {{baseUrl}}/api/specific_prices
+Authorization: Basic {{wsKey}} :
+
+### Règles de prix spécifiques
+GET {{baseUrl}}/api/specific_price_rules
+Authorization: Basic {{wsKey}} :
+
+### Recherche
+GET {{baseUrl}}/api/search
+Authorization: Basic {{wsKey}} :
+
+############################################################
+# 7. AUTHENTIFICATION OAUTH2 (NOUVEAU)
+############################################################
+
+### Obtenir un token OAuth2 avec Client Credentials
+POST {{baseUrl}}/api/oauth2/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=client_credentials&client_id={{clientId}}&client_secret={{clientSecret}}

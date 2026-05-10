@@ -46,6 +46,7 @@ export class ApiService {
   }
 
   protected static async getAll(endpoint: string, params: string = ''): Promise<any> {
-    return await fetchPrestaShop(`/api/${endpoint}${params ? '?' + params : ''}`);
+    const url = `/api/${endpoint}${params ? '?' + params : ''}`;
+    return await fetchPrestaShop(encodeURI(url));
   }
 }

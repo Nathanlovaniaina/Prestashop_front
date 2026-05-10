@@ -47,13 +47,29 @@ Pour respecter l'intégrité de la base de données, l'import doit suivre cet or
 | Priorité | Entité | Dépend de... |
 | :--- | :--- | :--- |
 | **1** | Pays / Langues | _Rien_ |
-| **2** | Catégories | Catégorie parente |
-| **3** | Clients | Groupe de clients |
-| **4** | Adresses | Client + Pays |
-| **5** | Produits | Catégorie + Marque |
-| **6** | Commandes | Client + Adresse + Transporteur |
+| **2** | Fournisseurs / Marques / Magasins | _Rien_ |
+| **3** | Catégories | Catégorie parente |
+| **4** | Clients | Groupe de clients |
+| **5** | Adresses | Client + Pays |
+| **6** | Produits | Catégorie + Marque + Fournisseur |
+| **7** | Paniers (Carts) | Client + Adresse + Produits (via Références) |
+| **8** | Commandes (Orders) | Panier + Client + Adresse |
 
-## 4. Recommandations UX
+## 4. Logique Spécifique : Paniers & Commandes
+
+L'importation de transactions suit un workflow strict pour garantir l'intégrité des données dans PrestaShop.
+
+### Flux Panier (Cart)
+1. **Résolution Client** : Le système utilise l'email fourni pour retrouver l'`id_customer` correspondant dans le cache.
+2. **Résolution Produits** : Les références produits (`product_refs`) sont transformées en IDs techniques (`id_product`) via le cache de références.
+3. **Construction XML** : Les lignes du panier (`cart_rows`) sont générées dynamiquement à partir des références et quantités.
+
+### Flux Commande (Order)
+1. **Liaison Panier** : L'ID du panier créé (ou importé) est utilisé comme pivot (`id_cart`).
+2. **Cohérence Financière** : Les champs `total_paid`, `total_products` et `total_shipping` doivent être fournis pour assurer la validité comptable de la commande.
+3. **Statut** : Le `status_id` (ex: 2 pour "Paiement accepté") définit l'état initial de la commande dans le back-office.
+
+## 5. Recommandations UX
 
 - **Indicateur de Progression :** Affichez une barre de progression globale et le nom de l'entité en cours de traitement.
 - **Journal d'Erreurs :** Permettez à l'utilisateur de télécharger un log (JSON ou CSV) des lignes ayant échoué à la fin du processus.

@@ -1,0 +1,5 @@
+Cart ID;Customer Email *;Delivery Address ID *;Invoice Address ID *;Product References (ref1,ref2...) *;Quantities (q1,q2...) *;Carrier ID;Language ID;Secure Key
+1;john.doe@test.com;1;1;RP-demo_1,RP-demo_2;2,1;1;1;abcdef123456
+2;jane.smith@test.com;2;2;RP-demo_3;1;1;1;bcdefg234567
+3;bob.wilson@test.com;1;1;RP-demo_1,RP-demo_2,RP-demo_3;1,2,1;1;1;cdefgh345678
+4;john.doe@test.com;1;1;RP-demo_1,RP-demo_2,RP-demo_3,RP-demo_4;1,1,1,1;1;1;defghi456789

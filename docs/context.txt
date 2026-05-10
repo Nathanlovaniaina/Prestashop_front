@@ -1,0 +1,49 @@
+Sujet : Spécifications techniques pour l'importation de flux transactionnels vers PrestaShop via API (Architecture Panier → Commande).
+
+Contexte :
+L'importation de commandes dans PrestaShop est un processus "en cascade". Une commande ne peut exister sans un panier (Cart) préalable qui sert de conteneur technique. Le script doit donc orchestrer la création séquentielle de ces entités tout en garantissant la correspondance des IDs générés par le serveur.
+
+Le Prompt d'Explication & Spécifications :
+
+"Explique la logique d'importation des commandes dans PrestaShop via API, en détaillant le workflow de transformation et la structure des fichiers sources nécessaires.
+
+1. Architecture du Workflow
+Dépendance Séquentielle : Justifie pourquoi l'ordre d'importation doit être : Client > Adresse > Panier > Commande.
+
+Le rôle du Panier (Cart) : Explique comment le panier lie techniquement le client aux produits (cart_rows) et aux transporteurs avant la vente.
+
+La validation en Commande (Order) : Comment l'API utilise l'id_cart pour générer automatiquement les lignes de détails (order_detail) et les factures.
+
+2. Spécification du fichier d'import : PANIERS (ps_cart)
+Détaille les colonnes suivantes et leur utilité :
+
+customer_email & secure_key : Pour identifier le client et sécuriser l'accès à son futur historique.
+
+id_address_delivery/invoice : Pour lier les coordonnées géographiques au flux.
+
+product_refs & quantities : Pour définir le contenu du colis.
+
+id_carrier & id_lang : Pour définir le mode de livraison et la langue des futurs emails de confirmation.
+
+3. Spécification du fichier d'import : COMMANDES (ps_orders)
+Détaille les colonnes suivantes et leur utilité :
+
+id_cart : L'identifiant dynamique récupéré après la création du panier (Clé de liaison).
+
+payment_module & payment_method : Pour définir le module technique utilisé (ex: ps_wirepayment) et le nom public du paiement.
+
+total_paid, total_products, total_shipping : Pour garantir la cohérence comptable (Produits + Frais de port = Total).
+
+order_date & status_id : Pour reconstruire l'historique temporel et définir l'état actuel (ex: 2 = Paiement accepté).
+
+4. Logique de Développement (React/API)
+Explique pourquoi le script doit être synchrone : attendre la réponse du serveur après le POST /carts pour injecter l'ID obtenu dans le POST /orders.
+
+Souligne l'importance de la gestion des erreurs : si la commande échoue après la création du panier, comment éviter les paniers orphelins."
+
+Ce que ce prompt apporte à ton projet :
+Justification du format CSV : Il explique que tes colonnes ne sont pas là par hasard, mais pour répondre aux contraintes de la base de données ps_orders et ps_cart.
+
+Clarté sur le "Mapping" : Il met en avant le fait que tu gères intelligemment les emails pour retrouver les IDs techniques de PrestaShop.
+
+Professionnalisme : En précisant des champs comme secure_key ou payment_module, tu montres que tu as anticipé les bugs classiques (comme les clients qui ne voient pas leurs commandes ou les erreurs de modules de paiement dans le back-office).

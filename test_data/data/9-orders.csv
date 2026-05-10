@@ -1,0 +1,3 @@
+Order ID;Cart ID *;Customer ID *;Delivery Address ID *;Invoice Address ID *;Payment Module (ex: ps_wirepayment) *;Payment Method *;Total Paid *;Total Products HT *;Total Shipping *;Order Date (yyyy-mm-dd);Status ID (ex: 2)
+1;21;12;1;1;ps_checkpayment;Chèque;260;260;0;10/05/2024;2
+

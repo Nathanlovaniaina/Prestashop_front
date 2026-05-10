@@ -104,5 +104,83 @@
     "phone_mobile": { "label": "Mobile Phone", "type": "string" },
     "vat_number": { "label": "VAT number", "type": "string" },
     "dni": { "label": "DNI", "type": "string" }
+  },
+  "carts": {
+    "id": { "label": "Cart ID", "type": "number" },
+    "customer_email": { "label": "Customer Email *", "type": "email" },
+    "id_address_delivery": { "label": "Delivery Address ID *", "type": "number" },
+    "id_address_invoice": { "label": "Invoice Address ID *", "type": "number" },
+    "product_refs": { "label": "Product References (ref1,ref2...) *", "type": "list" },
+    "quantities": { "label": "Quantities (q1,q2...) *", "type": "list" },
+    "id_carrier": { "label": "Carrier ID", "type": "number" },
+    "id_lang": { "label": "Language ID", "type": "number" },
+    "secure_key": { "label": "Secure Key", "type": "string" }
+  },
+  "orders": {
+    "id": { "label": "Order ID", "type": "number" },
+    "id_cart": { "label": "Cart ID *", "type": "number" },
+    "id_customer": { "label": "Customer ID *", "type": "number" },
+    "id_address_delivery": { "label": "Delivery Address ID *", "type": "number" },
+    "id_address_invoice": { "label": "Invoice Address ID *", "type": "number" },
+    "payment_module": { "label": "Payment Module (ex: ps_wirepayment) *", "type": "string" },
+    "payment_method": { "label": "Payment Method *", "type": "string" },
+    "total_paid": { "label": "Total Paid *", "type": "number" },
+    "total_products": { "label": "Total Products HT *", "type": "number" },
+    "total_shipping": { "label": "Total Shipping *", "type": "number" },
+    "order_date": { "label": "Order Date (yyyy-mm-dd)", "type": "date" },
+    "status_id": { "label": "Status ID (ex: 2)", "type": "number" }
+  },
+  "suppliers": {
+    "id": { "label": "Supplier ID", "type": "number" },
+    "active": { "label": "Active (0/1)", "type": "boolean" },
+    "name": { "label": "Name *", "type": "string" },
+    "description": { "label": "Description", "type": "string" },
+    "meta_title": { "label": "Meta title", "type": "string" },
+    "meta_keywords": { "label": "Meta keywords", "type": "string" },
+    "meta_description": { "label": "Meta description", "type": "string" },
+    "image_url": { "label": "Image URL", "type": "string" }
+  },
+  "brands": {
+    "id": { "label": "ID", "type": "number" },
+    "active": { "label": "Active (0/1)", "type": "boolean" },
+    "name": { "label": "Name *", "type": "string" },
+    "description": { "label": "Description", "type": "string" },
+    "short_description": { "label": "Short description", "type": "string" },
+    "meta_title": { "label": "Meta title", "type": "string" },
+    "meta_keywords": { "label": "Meta keywords", "type": "string" },
+    "meta_description": { "label": "Meta description", "type": "string" },
+    "image_url": { "label": "Image URL", "type": "string" }
+  },
+  "stores": {
+    "id": { "label": "Store ID", "type": "number" },
+    "active": { "label": "active", "type": "boolean" },
+    "name": { "label": "name", "type": "string" },
+    "address1": { "label": "address1", "type": "string" },
+    "address2": { "label": "address2", "type": "string" },
+    "postcode": { "label": "postcode", "type": "string" },
+    "city": { "label": "city", "type": "string" },
+    "state": { "label": "state", "type": "string" },
+    "country": { "label": "country", "type": "string" },
+    "latitude": { "label": "latitude", "type": "number" },
+    "longitude": { "label": "longitude", "type": "number" },
+    "phone": { "label": "phone", "type": "string" },
+    "fax": { "label": "fax", "type": "string" },
+    "email": { "label": "email", "type": "string" },
+    "note": { "label": "note", "type": "string" },
+    "hours": { "label": "hours", "type": "string" },
+    "image": { "label": "image", "type": "string" }
+  },
+  "categories": {
+    "id": { "label": "Category ID", "type": "number" },
+    "active": { "label": "Active (0/1)", "type": "boolean" },
+    "name": { "label": "Name *", "type": "string" },
+    "parent_category": { "label": "Parent category", "type": "string" },
+    "is_root_category": { "label": "Root category (0/1)", "type": "boolean" },
+    "description": { "label": "Description", "type": "string" },
+    "meta_title": { "label": "Meta title", "type": "string" },
+    "meta_keywords": { "label": "Meta keywords", "type": "string" },
+    "meta_description": { "label": "Meta description", "type": "string" },
+    "link_rewrite": { "label": "URL rewritten", "type": "string" },
+    "image_url": { "label": "Image URL", "type": "string" }
   }
 }

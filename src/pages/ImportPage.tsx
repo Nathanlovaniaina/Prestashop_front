@@ -32,7 +32,7 @@ const ImportPage: React.FC = () => {
   const [headers, setHeaders] = useState<string[]>([]);
   const [fieldSeparator, setFieldSeparator] = useState(';');
   const [multipleValueSeparator, setMultipleValueSeparator] = useState(',');
-  const [selectedEntity, setSelectedEntity] = useState<'products' | 'customers' | 'addresses'>('products');
+  const [selectedEntity, setSelectedEntity] = useState<'products' | 'customers' | 'addresses' | 'carts' | 'orders' | 'suppliers' | 'brands' | 'stores' | 'categories'>('products');
   const [strictMode, setStrictMode] = useState(true);
   const [mapping, setMapping] = useState<Record<string, string>>(() => {
     const config = (defaultMapping as any).products;
@@ -62,6 +62,60 @@ const ImportPage: React.FC = () => {
     addresses: {
       label: 'Adresses',
       fields: Object.entries((defaultMapping as any).addresses).map(([id, info]: [string, any]) => ({
+        id,
+        label: info.label,
+        required: info.label.includes('*'),
+        type: info.type
+      }))
+    },
+    carts: {
+      label: 'Paniers',
+      fields: Object.entries((defaultMapping as any).carts).map(([id, info]: [string, any]) => ({
+        id,
+        label: info.label,
+        required: info.label.includes('*'),
+        type: info.type
+      }))
+    },
+    orders: {
+      label: 'Commandes',
+      fields: Object.entries((defaultMapping as any).orders).map(([id, info]: [string, any]) => ({
+        id,
+        label: info.label,
+        required: info.label.includes('*'),
+        type: info.type
+      }))
+    },
+    suppliers: {
+      label: 'Fournisseurs',
+      fields: Object.entries((defaultMapping as any).suppliers).map(([id, info]: [string, any]) => ({
+        id,
+        label: info.label,
+        required: info.label.includes('*'),
+        type: info.type
+      }))
+    },
+    brands: {
+      label: 'Marques',
+      fields: Object.entries((defaultMapping as any).brands).map(([id, info]: [string, any]) => ({
+        id,
+        label: info.label,
+        required: info.label.includes('*'),
+        type: info.type
+      }))
+    },
+    stores: {
+      label: 'Magasins',
+      fields: Object.entries((defaultMapping as any).stores).map(([id, info]: [string, any]) => ({
+        id,
+        label: info.label,
+        required: info.label.includes('*'),
+        type: info.type
+      }))
+    },
+    categories: {
+      label: 'Catégories',
+      fields: Object.entries((defaultMapping as any).categories).map(([id, info]: [string, any]) => ({
         id,
         label: info.label,
         required: info.label.includes('*'),
@@ -268,6 +322,18 @@ const ImportPage: React.FC = () => {
               const { email, oldId, newId } = result._rectification;
               addLog(`Ligne ${lineNum} : ID Client rectifié pour ${email} (${oldId} ➔ ${newId})`, 'info');
             }
+          } else if (selectedEntity === 'carts') {
+            await ImportService.importCart(mappedData, multipleValueSeparator, strictMode);
+          } else if (selectedEntity === 'orders') {
+            await ImportService.importOrder(mappedData, strictMode);
+          } else if (selectedEntity === 'suppliers') {
+            await ImportService.importSupplier(mappedData, strictMode);
+          } else if (selectedEntity === 'brands') {
+            await ImportService.importBrand(mappedData, strictMode);
+          } else if (selectedEntity === 'stores') {
+            await ImportService.importStore(mappedData, strictMode);
+          } else if (selectedEntity === 'categories') {
+            await ImportService.importCategory(mappedData, strictMode);
           }
           addLog(`Ligne ${lineNum} (${displayName}) : Succès`, 'success');
           setSuccessCount(prev => prev + 1);
@@ -348,6 +414,12 @@ const ImportPage: React.FC = () => {
               <option value="products">Produits</option>
               <option value="customers">Clients</option>
               <option value="addresses">Adresses</option>
+              <option value="carts">Paniers</option>
+              <option value="orders">Commandes</option>
+              <option value="suppliers">Fournisseurs</option>
+              <option value="brands">Marques</option>
+              <option value="stores">Magasins</option>
+              <option value="categories">Catégories</option>
             </select>
           </div>
           <div style={{flex: 1}}>

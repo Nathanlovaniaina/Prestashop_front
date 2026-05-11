@@ -6,7 +6,7 @@ import { xmlToJson } from './xmlParser';
 export const PRESTASHOP_CONFIG = {
   // En développement, on laisse vide pour utiliser le proxy Vite
   baseUrl: '',
-  wsKey: 'kqZubkmM41ZZ0X0oWO1LNhhW86kz84k4',
+  wsKey: 'jrKT8HYKWnrH2oWYSbU3sF8JYPhtXfV2',
 };
 
 /**
